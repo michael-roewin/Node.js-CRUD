@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="user">
+<head>
+	<title><%= title %></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+	<script type="text/javascript">
+	angular.module('user', [])
+		.factory('userService', ['$http', function($http) {
+			return {
+				saveUser: function(data, callback) {
+					$http.post('/user', data).success(function(res) {
+						callback(res);
+				 	});
+				},
+
+				updateUser: function(data, callback) {
+					var id = data.id;
+					delete data.id;
+
+					$http.put('/user/' +  id, data).success(function(res) {
+						callback(res);
+				 	});
+				},
+
+				deleteUser: function(data, callback) {
+					var id = data.id;
+
+					$http.delete('/user/' +  id, data).success(function(res) {
+						callback(res);
+				 	});
+				}
+			};
+		}])
+		.controller('userController', ['$scope', 'userService', function($scope, $userService) {
+
+			$scope.add = function() {
+				window.location.href = 'user/new';
+			};
+
+			$scope.edit = function(id) {
+				window.location.href = 'user/' + id;
+			};
+
+			$scope.save = function() {
+				$userService.saveUser({name: $scope.name}, function(data) {
+					var message = data==='true' ? 'Data Saved' : 'Error in Saving';
+					alert(message);
+				});
+			};
+
+			$scope.update = function() {
+				$userService.updateUser({name: $scope.name, id: $scope.id}, function(data) {
+					var message = data==='true' ? 'Data Updated' : 'Error in Saving';
+					alert(message);
+				});
+			};
+
+			$scope.delete = function(id, e) {
+				$userService.deleteUser({id: id}, function(data) {
+					var message = data==='true' ? 'Data Deleted' : 'Error in Saving';
+					alert(message);
+					angular.element(e.srcElement).parent().parent().remove();
+				});
+			};
+
+			<% if(typeof user == 'object') { %>
+				$scope.id = '<%= user._id %>';
+				$scope.name = '<%= user.name %>';
+			<% } %>
+		}]);
+	</script>
+</head>
+<body>
+<header>
+	
+</header>
+<main ng-controller="userController">

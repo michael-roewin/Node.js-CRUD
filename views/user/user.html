@@ -1,0 +1,12 @@
+<% include ../header.html %>
+<h1 style="display:inline-block;font-size:18px;"><%= typeof user == 'undefined' ? 'Add' : 'Edit' %> User</h1> | 
+<a href="/users" style="color:blue;text-decoration:none;">View All Users</a>
+<form ng-submit="<%= typeof user == 'undefined' ? 'save()' : 'update()' %>">
+	<label>Name:</label> 
+	<input type="text" name="name" ng-model="name" />
+	<% if(typeof user == 'object') { %>
+	<input type="hidden" name="id" ng-model="id" />
+	<% } %>
+	<input type="submit" />
+</form>
+<% include ../footer.html %>

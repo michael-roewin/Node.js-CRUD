@@ -1,0 +1,17 @@
+<% include ../header.html %>
+	<input type="button" value="Add User" ng-click="add()"/>
+	<table>
+		<tr>
+			<th colspan="2">List of Users:</th>
+		</tr>
+		<% if(users.length) { %>
+		<% users.forEach(function(user,key) { %>
+		<tr>
+			<td><%= user.name %></td>
+			<td><input type="button" value="Edit" ng-click="edit('<%= user._id %>')" /></td>
+			<td><input type="button" value="Delete" ng-click="delete('<%= user._id %>', $event)" /></td>
+		</tr>
+		<% }); %>
+		<% } %>
+	</table>
+<% include ../footer.html %>
